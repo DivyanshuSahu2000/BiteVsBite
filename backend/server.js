@@ -4,6 +4,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDb from "./config/db.js";
+import restaurantRoutes from "./routes/restaurantRoutes.js";
+import foodRoutes from "./routes/foodRoutes.js";
 
 const app = express();
 
@@ -15,6 +17,8 @@ const PORT = process.env.PORT;
 app.get("/", (req, res) => {
   res.send("Success");
 });
+app.use("/api/restaurants/", restaurantRoutes);
+app.use("/api/foods/", foodRoutes);
 
 app.listen(PORT, () => {
   console.log(`http://localhost:${PORT}/`);
