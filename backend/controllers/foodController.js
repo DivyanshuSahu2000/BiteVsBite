@@ -38,3 +38,38 @@ export const getFoodById = async (req, res) => {
     });
   }
 };
+
+export const comparePrices = async (req, res) => {
+  try {
+    const { foodId } = req.params;
+
+    const food = await Food.findById(foodId).populate("restaurant");
+
+    if (!food) {
+      return res.status(404).json({
+        message: "Food not found",
+      });
+    }
+
+    if (food.platforms.length === 0) {
+      return res.status(404).json({
+        message: "No platform prices available",
+      });
+    }
+
+    const cheapestPlatform = food.platforms.reduce((cheapest, current) => {
+      return current.finalPrice < cheapest.finalPrice ? current : cheapest;
+    });
+
+    res.status(200).json({
+      food: food.name,
+      platforms: food.platforms,
+      cheapest: cheapestPlatform,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to compare prices",
+      error: error.message,
+    });
+  }
+};

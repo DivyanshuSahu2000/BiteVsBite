@@ -5,7 +5,7 @@ const platformSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      trime: true,
+      trim: true,
     },
     price: {
       type: Number,
@@ -51,7 +51,7 @@ const foodSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: "true",
+      default: "",
     },
     restaurant: {
       type: mongoose.Schema.Types.ObjectId,
