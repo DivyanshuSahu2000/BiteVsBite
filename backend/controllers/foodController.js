@@ -41,9 +41,9 @@ export const getFoodById = async (req, res) => {
 
 export const comparePrices = async (req, res) => {
   try {
-    const { foodId } = req.params;
+    // const { foodId } = req.params;
 
-    const food = await Food.findById(foodId).populate("restaurant");
+    const food = await Food.findById(req.params.id).populate("restaurant");
 
     if (!food) {
       return res.status(404).json({
@@ -69,6 +69,20 @@ export const comparePrices = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Failed to compare prices",
+      error: error.message,
+    });
+  }
+};
+
+export const getSpecialOffers = async (req, res) => {
+  try {
+    const foods = await Food.find({
+      "platforms.specialOffer": true,
+    }).populate("restaurant");
+    res.status(200).json(foods);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to load special offer",
       error: error.message,
     });
   }

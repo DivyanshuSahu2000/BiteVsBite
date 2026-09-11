@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   res.send("Success");
 });
 app.use("/api/restaurants/", restaurantRoutes);
-app.use("/api/foods/", foodRoutes);
+app.use("/api/foods", foodRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/cart", cartRoutes);
