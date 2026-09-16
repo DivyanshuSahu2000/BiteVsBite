@@ -1,17 +1,33 @@
 import Food from "../models/Food.js";
-
+import Restaurant from "../models/Restaurant.js";
 export const getFoods = async (req, res) => {
   try {
-    const { search } = req.query;
-    let foods;
+    const { search, restaurant } = req.query;
+    let query = {};
 
     if (search) {
       foods = await Food.find({
         name: { $regex: search, $options: "i" },
       }).populate("restaurant");
-    } else {
-      foods = await Food.find().populate("restaurant");
     }
+    if (restaurant) {
+      const restaurantData = await Restaurant.findOne({
+        name: {
+          $regex: restaurant,
+          $options: "i",
+        },
+      });
+
+      if (!restaurantData) {
+        return res.status(404).json({
+          message: "Restaurant not found",
+        });
+      }
+
+      query.restaurant = restaurantData._id;
+    }
+
+    const foods = await Food.find(query).populate("restaurant");
 
     res.status(200).json(foods);
   } catch (error) {
